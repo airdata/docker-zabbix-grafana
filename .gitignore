@@ -90,3 +90,5 @@ zbx_env/etc/ssl/grafana/ssl.key
 zbx_env/etc/ssl/grafana/dhparam.pem
 zbx_env/var/lib/mysql/*
 zbx_env/var/lib/grafana/*
+/.zbx_env/var/lib/mysql/*
+zbx_env/var/lib/mysql/*

@@ -110,9 +110,9 @@ cat <<EOF
         "esc_period": "1h",
         "def_shortdata": "Auto registration: {HOST.HOST}",
         "def_longdata": "Host name: {HOST.HOST}\r\nHost IP: {HOST.IP}\r\nAgent port: {HOST.PORT}",
-    "r_shortdata": "",
+		"r_shortdata": "",
         "r_longdata": "",
-    "ack_shortdata": "",
+		"ack_shortdata": "",
         "ack_longdata": "",
         "filter": {
             "evaltype": 0,
@@ -136,7 +136,7 @@ cat <<EOF
                     "evaltype": "0",
                     "opconditions": []
                 },
-              {
+            	{
                     "actionid": "8",
                     "operationtype": "4",
                     "esc_period": "0",
@@ -210,7 +210,25 @@ cat <<EOF
                     "${HOST_GROUPS[5]}",
                     "${HOST_GROUPS[6]}",
                     "${HOST_GROUPS[7]}",
-                    "${HOST_GROUPS[8]}"
+                    "${HOST_GROUPS[8]}",
+                    "${HOST_GROUPS[9]}",
+                    "${HOST_GROUPS[10]}",
+                    "${HOST_GROUPS[11]}",
+                    "${HOST_GROUPS[12]}",
+                    "${HOST_GROUPS[13]}",
+                    "${HOST_GROUPS[14]}",
+                    "${HOST_GROUPS[15]}",
+                    "${HOST_GROUPS[16]}",
+                    "${HOST_GROUPS[17]}",
+                    "${HOST_GROUPS[18]}",
+                    "${HOST_GROUPS[19]}",
+                    "${HOST_GROUPS[20]}",
+                    "${HOST_GROUPS[21]}",
+                    "${HOST_GROUPS[22]}",
+                    "${HOST_GROUPS[23]}",
+                    "${HOST_GROUPS[24]}",
+                    "${HOST_GROUPS[25]}",
+                    "${HOST_GROUPS[26]}"
                 ]
             }
           },
@@ -233,9 +251,9 @@ cat <<EOF
         "esc_period": "1h",
         "def_shortdata": "Auto registration: {HOST.HOST}",
         "def_longdata": "Host name: {HOST.HOST}\r\nHost IP: {HOST.IP}\r\nAgent port: {HOST.PORT}",
-    "r_shortdata": "",
+		"r_shortdata": "",
         "r_longdata": "",
-    "ack_shortdata": "",
+		"ack_shortdata": "",
         "ack_longdata": "",
         "filter": {
             "evaltype": 0,
@@ -259,7 +277,7 @@ cat <<EOF
                     "evaltype": "0",
                     "opconditions": []
                 },
-              {
+            	{
                     "actionid": "8",
                     "operationtype": "4",
                     "esc_period": "0",
@@ -306,7 +324,7 @@ cat <<EOF
     "params": {
         "name": "Used disk space on \$1 (percentage)",
         "key_": "vfs.fs.size[{#FSNAME},pused]",
-    "value_type": "0",
+		"value_type": "0",
         "units": "%",
         "hostid": "10001",
         "ruleid": "22450",
@@ -342,9 +360,9 @@ LinuxCPULoadAllCorePD=$(cat <<EOF
         "interfaceid": "0",
         "applications": ["13"],
         "delay": "1m",
-    "history": "1w",
+		"history": "1w",
         "trends": "365d",
-    "description": "The processor load is cumulative system CPU load.",
+		"description": "The processor load is cumulative system CPU load.",
         "status": "0"
     },
     "auth": "$ZBX_AUTH_TOKEN",
@@ -387,7 +405,7 @@ cat <<EOF
     "params": {
         "name": "Available memory in %",
         "key_": "vm.memory.size[pavailable]",
-    "value_type": "0",
+		"value_type": "0",
         "units": "%",
         "hostid": "10001",
         "type": 0,
@@ -413,7 +431,7 @@ cat <<EOF
     "params": {
         "name": "Number of CPU",
         "key_": "system.cpu.num[online]",
-    "value_type": "0",
+		"value_type": "0",
         "units": "",
         "hostid": "10001",
         "type": 0,
@@ -437,7 +455,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-      "hostid": "10001",
+    	"hostid": "10001",
         "itemid": "22450",
         "delay": "5m"
     },
@@ -454,7 +472,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-      "hostid": "10001",
+    	"hostid": "10001",
         "itemid": "22444",
         "delay": "5m"
     },
@@ -471,7 +489,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
-      "hostid": "10001",
+    	"hostid": "10001",
         "itemid": "10026",
         "delay": "10m"
     },
@@ -488,7 +506,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
-      "hostid": "10001",
+    	"hostid": "10001",
         "itemid": "10030",
         "delay": "10m"
     },
@@ -507,7 +525,7 @@ cat <<EOF
     "params": {
         "name": "Number of CPU",
         "key_": "system.cpu.num[online]",
-    "value_type": "0",
+		"value_type": "0",
         "units": "",
         "hostid": "10081",
         "type": 0,
@@ -532,7 +550,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-      "hostid": "10081",
+    	"hostid": "10081",
         "itemid": "23162",
         "delay": "5m"
     },
@@ -549,7 +567,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-      "hostid": "10081",
+    	"hostid": "10081",
         "itemid": "23163",
         "delay": "5m"
     },
@@ -568,7 +586,7 @@ cat <<EOF
     "params": {
         "name": "CPU Utilization",
         "key_": "system.cpu.util",
-    "value_type": "0",
+		"value_type": "0",
         "units": "%",
         "hostid": "10081",
         "type": 0,
@@ -592,11 +610,11 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
-      "hostid": "10081",
+    	"hostid": "10081",
         "itemid": "23158",
         "name": "Free memory in %",
         "key_": "vm.memory.size[pavailable]",
-    "value_type": 0,
+		"value_type": 0,
         "units": "%"
     },
     "auth": "$ZBX_AUTH_TOKEN",
@@ -627,7 +645,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "trigger.create",
     "params": {
-    "description": "Lack of free memory on server {HOST.NAME}",
+		"description": "Lack of free memory on server {HOST.NAME}",
         "expression": "{Template OS Windows:vm.memory.size[pavailable].last(0)}<10",
         "expression_constructor": "0",
         "recovery_expression_constructor": "0",
@@ -647,7 +665,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-    "hostid": "10081",
+		"hostid": "10081",
         "itemid": "23665",
         "status": "1"
     },
@@ -1003,65 +1021,137 @@ cat <<EOF
     "params": {
         "name": "API Users",
         "gui_access": 3,
-    "users_status": 0,
-    "rights": [
-      {
-        "permission": 2,
-          "id": "4"
-        },
-      {
-        "permission": 2,
-          "id": "5"
-        },
-      {
-        "permission": 2,
-          "id": "6"
-        },
-        {
-        "permission": 2,
-          "id": "7"
-        },
-      {
-        "permission": 2,
-          "id": "8"
-        },        
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[0]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[1]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[2]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[3]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[4]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[5]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[6]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[7]}"
-        },
-        {
-          "permission": 2,
-          "id": "${GRP_IDS_ARRAY[8]}"
-        }
-    ]
+		"users_status": 0,
+		"rights": [
+			{
+				"permission": 2,
+		    	"id": "2"
+		    },
+		    {
+				"permission": 2,
+		    	"id": "4"
+		    },
+			{
+				"permission": 2,
+		    	"id": "5"
+		    },
+			{
+				"permission": 2,
+		    	"id": "6"
+		    },
+			{
+				"permission": 2,
+		    	"id": "7"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[0]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[1]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[2]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[3]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[4]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[5]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[6]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[7]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[8]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[9]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[10]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[11]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[12]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[13]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[14]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[15]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[16]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[17]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[18]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[19]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[20]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[21]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[22]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[23]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[24]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[25]}"
+		    },
+		    {
+		    	"permission": 2,
+		    	"id": "${GRP_IDS_ARRAY[26]}"
+		    }
+		]
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -1148,8 +1238,8 @@ function CreateGRFAPIKey () {
     -H "Content-Type:application/json" \
     -X POST -d \
      '{
-      "name":"zabbix-api-key",
-      "role": "Admin"
+	    "name":"zabbix-api-key",
+	    "role": "Admin"
       }' \
      $GRF_SERVER_URL/api/auth/keys |jq .key |tr -d '"')
 }
@@ -1181,5 +1271,4 @@ cat <<EOF
 }
 EOF
 }
-
 

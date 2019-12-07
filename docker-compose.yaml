@@ -13,6 +13,8 @@ services:
       - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
       - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
       - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
+    volumes_from:
+      - zabbix-snmptraps:ro
     restart: always
     links:
     - mysql-server:mysql-server
@@ -122,6 +124,23 @@ services:
       com.zabbix.component: "java-gateway"
       com.zabbix.os: "alpine"
 
+  zabbix-snmptraps:
+    image: zabbix/zabbix-snmptraps:alpine-4.2-latest
+    ports:
+      - "162:162/udp"
+    volumes:
+      - ./zbx_env/var/lib/zabbix/snmptraps:/var/lib/zabbix/snmptraps:rw
+    restart: always
+    user: root
+    networks:
+      zbx_net:
+        aliases:
+          - zabbix-snmptraps
+    labels:
+      com.zabbix.description: "Zabbix snmptraps"
+      com.zabbix.company: "Zabbix SIA"
+      com.zabbix.component: "snmptraps"
+      com.zabbix.os: "ubuntu"
 
   mysql-server:
     image: mysql:5.7
@@ -181,3 +200,5 @@ networks:
       config:
         - subnet: 172.16.238.0/24
           gateway: 172.16.238.1
+#       - subnet: 2001:3984:3989::/64
+#         gateway: 2001:3984:3989::1

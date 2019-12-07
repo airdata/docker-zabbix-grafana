@@ -6,7 +6,7 @@ source ./scripts/environmets.sh > /dev/null 2>&1 || source environmets.sh > /dev
 source ./scripts/functions.sh > /dev/null 2>&1 || source functions.sh > /dev/null 2>&1
 
 case "$1" in
-    install)
+    init)
         ########## ZABBIX DEPLOYMENT ##########
         echo ""
         echo -e '\E[1m'"\033\DOCKERIZED ZABBIX DEPLOYMENT AND CONFIGURATION SCRIPT \033[0m"
@@ -17,8 +17,8 @@ case "$1" in
         echo -e '\E[1m'"\033\- Latest Docker(CE) engine and docker-compose installation. \033[0m"
         echo -e '\E[1m'"\033\- Dockerized zabbix server deployment by using the official zabbix docker images and compose file. \033[0m"
         echo -e '\E[1m'"\033\- Required packages installation like epel-repo and jq.\033[0m"
-        echo -e '\E[1m'"\033\- Creating auto registration actions for Linux. \033[0m"
-        echo -e '\E[1m'"\033\- Creating some additional check items/triggers for Linux templates. \033[0m"
+        echo -e '\E[1m'"\033\- Creating auto registration actions for Linux & Windows hosts. \033[0m"
+        echo -e '\E[1m'"\033\- Creating some additional check items/triggers for Linux & Windows templates. \033[0m"
         echo -e '\E[1m'"\033\- Grafana integration and deployment of some useful custom dashboards. \033[0m"
         echo -e '\E[1m'"\033\- SMTP settings and admin email configurations. (Optional) \033[0m"
         echo -e '\E[1m'"\033\- Slack integration. (Optional) \033[0m"
@@ -198,7 +198,6 @@ case "$1" in
             EchoDash
         fi
 
-
         ########## HOST GROUPS CONFIGURATIONS ##########
         # This creates all defined host groups in environment file
         echo -e ""
@@ -209,6 +208,12 @@ case "$1" in
         EchoDash
 
         ########## AUTO REGISTRATION CONFIGURATIONS ##########
+        # Get Windows host group ID to use it on creating the auto registration action.
+        WGROUPID=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(WinHostGroupIDPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .result[].groupid |tr -d '"')
+
         # Create an auto registration action for Linux servers
         echo -e ""
         echo -e '\E[96m'"\033\- Create auto registration actions.\033[0m"
@@ -236,6 +241,32 @@ case "$1" in
             echo -ne "\t\t\t\t" && Done
             sleep 1
         fi
+
+        # Create an auto registration action for Windows servers
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(AutoRegisterWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Windows auto registration action is already exists."
+                echo -ne "\t\t" && Skip
+            else
+                echo ""
+                echo -n "Win auto registration action:"
+                echo -ne "\t\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Win auto registration action:"
+            echo -ne "\t\t\t\t" && Done
+            sleep 1
+            EchoDash
+        fi
+
 
         ########## TEMPLATE CONFIGURATIONS ##########
         # This will add new time
@@ -406,9 +437,194 @@ case "$1" in
             sleep 1
         fi
         EchoDash
+
+        echo -e ""
+        echo -e '\E[96m'"\033\- Tune Windows OS Template.\033[0m"
         sleep 1
 
-        
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(CreateNumOfCPUWinItemPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "CPU count item for Windows is already exists."
+                echo -ne "\t" && Skip
+            else
+                echo ""
+                echo -n "Create CPU count item for Windows:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create CPU count item for Windows:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(CPUUtilWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "CPU utilization item for Windows is already exists."
+                echo -ne "\t" && Skip
+            else
+                echo ""
+                echo -n "Create CPU utilization item for Windows:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create CPU utilization item for Windows:"
+            echo -ne "\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(DisableAnnoyingWinServiceDiscovery)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Annoying Windows service discovery already disabled."
+                echo -ne "\t" && Skip
+            else
+                echo ""
+                echo -n "Disable annoying Windows service LLD rule:"
+                echo -ne "\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Disable annoying Windows service items LLD rule:"
+            echo -ne "\t" && Done
+            sleep 1
+        fi
+
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(LLDFSRuleWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "LLD rule is already set to 5m."
+                echo -ne "\t\t" && Skip
+            else
+                echo ""
+                echo -n "Set filesystem discovery LLD interval to 5m:"
+                echo -ne "\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Set filesystem discovery LLD interval to 5m:" && \
+            echo -ne "\t\t" && Done
+            sleep 1
+        fi
+        sleep 1
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(LLDNetIfRuleWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "LLD rule is already set to 5m."
+                echo -ne "\t\t\t\t" && Skip
+            else
+                echo -n "Set netif discovery LLD interval to 5m:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Set netif discovery LLD interval to 5m:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(FreeMemPercentWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Free mem in % item is already exist."
+                echo -ne "\t\t\t" && Skip
+            else
+                echo -n "Update fee mem item as percentage:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Update fee mem item as percentage:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(ExistingFreeMemTriggerWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Free mem trigger is already deleted"
+                echo -ne "\t\t\t" && Skip
+            else
+                echo -n "Delete existing trigger for free mem:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Delete existing trigger for free mem:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(NewFreeMemTriggerWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Free mem trigger is already exist"
+                echo -ne "\t\t\t" && Skip
+            else
+                echo -n "Create trigger for free mem in %:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create trigger for free mem in %:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+            EchoDash
+        fi
+
         ########## ZABBIX API USER CONFIGURATIONS ##########
         echo -e ""
         echo -e '\E[96m'"\033\- Create a read-only user for Zabbix API.\033[0m"
@@ -533,6 +749,7 @@ case "$1" in
             sleep 1
             EchoDash
         fi
+
         ########## GRAFANA CONFIGURATIONS ##########
         echo -e ""
         echo -e '\E[96m'"\033\- Grafana configurations.\033[0m"
@@ -660,6 +877,27 @@ case "$1" in
         else
             echo ""
             echo -n "Import Linux servers dashboard:"
+            echo -ne "\t\t" && Failed
+            echo -n "An error occured. Please check the error output"
+            echo $POST |jq .
+            sleep 1
+        fi
+
+        # Import Windows servers dashboard
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type: application/json;charset=UTF-8" \
+        -H "Authorization:Bearer $GRF_API_KEY" \
+        -d "@../grafana_dashboards/windows_servers_dashboard.json" \
+        -X POST "$GRF_SERVER_URL/api/dashboards/db" |jq .)
+
+        if [[ "$POST" == *"success"* ]]; then
+            echo -n "Import Windows servers dashboard:"
+            echo -ne "\t\t" && Done
+            sleep 1
+        else
+            echo ""
+            echo -n "Import Windows servers dashboard:"
             echo -ne "\t\t" && Failed
             echo -n "An error occured. Please check the error output"
             echo $POST |jq .
@@ -847,6 +1085,6 @@ case "$1" in
     ;;
 
     *)
-        echo $"Usage: $0 {install}"
+        echo $"Usage: $0 {init}"
         exit 1
 esac

@@ -6,7 +6,7 @@ source ./scripts/environmets.sh > /dev/null 2>&1 || source environmets.sh > /dev
 source ./scripts/functions.sh > /dev/null 2>&1 || source functions.sh > /dev/null 2>&1
 
 case "$1" in
-    init)
+    install)
         ########## ZABBIX DEPLOYMENT ##########
         echo ""
         echo -e '\E[1m'"\033\DOCKERIZED ZABBIX DEPLOYMENT AND CONFIGURATION SCRIPT \033[0m"
@@ -1085,6 +1085,6 @@ case "$1" in
     ;;
 
     *)
-        echo $"Usage: $0 {init}"
+        echo $"Usage: $0 {install}"
         exit 1
 esac

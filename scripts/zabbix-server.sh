@@ -1084,6 +1084,10 @@ case "$1" in
         sleep 1
     ;;
 
+    uninstall)
+        docker-compose down --rmi all
+	docker volume rm zabbix-grafana-docker-centos_zabbix-db-data zabbix-grafana-docker-centos_grafana-data
+    ;;
     *)
         echo $"Usage: $0 {install}"
         exit 1

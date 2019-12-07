@@ -31,8 +31,15 @@ Here's the summary:
 
 To invoke zabbix server installation, execute the "zabbix-server" script with "init" parameter and follow the instructions.
 
+### Install
 ```
 # bash scripts/zabbix-server.sh install
+```
+
+### Uninstall 
+
+```
+# bash scripts/zabbix-server.sh uninstall
 ```
 
 You can find an complete example output at the end of the page.

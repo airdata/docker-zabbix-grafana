@@ -15,8 +15,8 @@ services:
       - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
     restart: always
     links:
-    - mysql-server:mysql-server
-    - zabbix-java-gateway:zabbix-java-gateway
+      - mysql-server:mysql-server
+      - zabbix-java-gateway:zabbix-java-gateway
     ulimits:
       nproc: 65535
       nofile:
@@ -126,8 +126,8 @@ services:
   mysql-server:
     image: mysql:5.7
     command: [mysqld, --character-set-server=utf8, --collation-server=utf8_bin]
-    volumes_from:
-      - db_data_mysql
+    volumes: 
+     - ./zbx_env/var/lib/mysql:var/lib/mysql:rw
     restart: always
     volume_driver: local
     env_file:
@@ -139,11 +139,6 @@ services:
           - mysql-server
           - zabbix-database
           - mysql-database
-
-  db_data_mysql:
-    image: busybox
-    volumes:
-      - zabbix-db-data:/var/lib/mysql:rw
 
   grafana-server:
     image: grafana/grafana:latest
@@ -168,7 +163,6 @@ services:
           - grafana
 
 volumes:
-  zabbix-db-data:
   grafana-data:
 
 networks:

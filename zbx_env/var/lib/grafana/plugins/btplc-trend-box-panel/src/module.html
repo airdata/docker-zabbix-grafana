@@ -1,0 +1,15 @@
+<a ng-href="{{ctrl.box.link.href}}" target="{{ctrl.box.link.target}}">
+  <table ng-style="{'height': ctrl.height + 'px', 'text-align': 'center', 'width': '100%'}">
+    <tr ng-style="ctrl.box.percentStyle">
+      <td>
+        {{ ctrl.box.percent }}
+      </td>
+    </tr>
+
+    <tr ng-style="ctrl.box.numberStyle">
+      <td>
+        {{ ctrl.box.number }}
+      </td>
+    </tr>
+  </table>
+</a>

@@ -127,9 +127,8 @@ services:
     image: mysql:5.7
     command: [mysqld, --character-set-server=utf8, --collation-server=utf8_bin]
     volumes: 
-     - ./zbx_env/var/lib/mysql:var/lib/mysql:rw
+     - ./zbx_env/var/lib/mysql:/var/lib/mysql:rw
     restart: always
-    volume_driver: local
     env_file:
       - ./configs/.env_db_mysql
     user: root
@@ -146,7 +145,7 @@ services:
       - "3000:3000"
     volumes:
       - ./zbx_env/etc/ssl/grafana:/etc/ssl/grafana:ro
-      - grafana-data:/var/lib/grafana:rw
+      - ./zbx_env/var/lib/grafana:/var/lib/grafana:rw
     restart: always
     env_file:
       - ./configs/.env_grafana
@@ -175,3 +174,4 @@ networks:
       config:
         - subnet: 172.16.238.0/24
           gateway: 172.16.238.1
+

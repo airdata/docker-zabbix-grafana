@@ -22,7 +22,7 @@ services:
       nofile:
         soft: 20000
         hard: 40000
-    mem_limit: 512m
+    mem_limit: 1024m
     env_file:
       - ./configs/.env_db_mysql
       - ./configs/.env_srv

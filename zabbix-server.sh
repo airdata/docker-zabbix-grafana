@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 PATH=$PATH:/usr/local/bin
-BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source ./scripts/environmets.sh > /dev/null 2>&1 || source environmets.sh > /dev/null 2>&1
 source ./scripts/functions.sh > /dev/null 2>&1 || source functions.sh > /dev/null 2>&1
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 case "$1" in
     install)
@@ -104,50 +104,6 @@ case "$1" in
             EchoDash
         else
             echo -n "Docker compose is already installed." && \
-            echo -ne "\t\t" && Skip
-            sleep 1
-            EchoDash
-        fi
-  #### 
-# SSL #
- ####
-        # Create a self signed SSL cert for zabbix frontend.
-        echo -e ""
-        echo -e '\E[96m'"\033\- Deploy self signed SSL cert for Zabbix UI. \033[0m"
-        sleep 1
-        if [ ! -e $BASEDIR/zbx_env/etc/ssl/nginx/ssl.crt ] && [ ! -e $BASEDIR/zbx_env/etc/ssl/nginx/ssl.key ]; then
-            openssl req -x509 -nodes -newkey rsa:2048 -days 1365 \
-              -out $BASEDIR/zbx_env/etc/ssl/nginx/ssl.crt \
-              -keyout $BASEDIR/zbx_env/etc/ssl/nginx/ssl.key \
-              -subj "/C=RO/ST=TR/L=IST/O=IT/CN=zabbix-server.local"
-            openssl dhparam -out $BASEDIR/zbx_env/etc/ssl/nginx/dhparam.pem 2048
-            echo -n "Self signed SSL deployment for zabbix:" && \
-            echo -ne "\t\t\t" && Done
-            sleep 1
-            EchoDash
-        else
-            echo -n "Zabbix UI SSL cert is already deployed" && \
-            echo -ne "\t\t" && Skip
-            sleep 1
-            EchoDash
-        fi
-
-        # Create a self signed SSL cert for grafana frontend.
-        echo -e ""
-        echo -e '\E[96m'"\033\- Deploy self signed SSL cert for Grafana UI. \033[0m"
-        sleep 1
-        if [ ! -e $BASEDIR/zbx_env/etc/ssl/grafana/ssl.crt ] && [ ! -e $BASEDIR/zbx_env/etc/ssl/grafana/ssl.key ]; then
-            openssl req -x509 -nodes -newkey rsa:2048 -days 1365 \
-              -out $BASEDIR/zbx_env/etc/ssl/grafana/ssl.crt \
-              -keyout $BASEDIR/zbx_env/etc/ssl/grafana/ssl.key \
-              -subj "/C=RO/ST=TR/L=IST/O=IT/CN=grafana-server.local"
-            openssl dhparam -out $BASEDIR/zbx_env/etc/ssl/grafana/dhparam.pem 2048
-            echo -n "Self signed SSL deployment for grafana:" && \
-            echo -ne "\t\t\t" && Done
-            sleep 1
-            EchoDash
-        else
-            echo -n "Grafana UI SSL cert is already deployed" && \
             echo -ne "\t\t" && Skip
             sleep 1
             EchoDash

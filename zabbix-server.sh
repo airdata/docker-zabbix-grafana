@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PATH=$PATH:/usr/local/bin
-
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source ./scripts/environmets.sh > /dev/null 2>&1 || source environmets.sh > /dev/null 2>&1
 source ./scripts/functions.sh > /dev/null 2>&1 || source functions.sh > /dev/null 2>&1
 

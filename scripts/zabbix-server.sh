@@ -108,12 +108,39 @@ case "$1" in
             sleep 1
             EchoDash
         fi
+        #add dirs
+        [ ! -d ../zbx_env/usr/lib/zabbix/alertscripts ] && mkdir -p ../zbx_env/usr/lib/zabbix/alertscripts
+        [ ! -d ../zbx_env/usr/lib/zabbix/externalscripts ] && mkdir -p ../zbx_env/usr/lib/zabbix/externalscripts
+        [ ! -d ../zbx_env/var/lib/zabbix/enc ] && mkdir -p ../zbx_env/var/lib/zabbix/enc
+        [ ! -d ../zbx_env/var/lib/zabbix/ssh_keys ] && mkdir -p ../zbx_env/var/lib/zabbix/ssh_keys
+        [ ! -d ../zbx_env/var/lib/zabbix/mibs ] && mkdir -p ../zbx_env/var/lib/zabbix/mibs
+        [ ! -d ../zbx_env/var/lib/zabbix/modules ] && mkdir -p ../zbx_env/var/lib/zabbix/modules
+        [ ! -d ../zbx_env/etc/zabbix/zabbix_agentd.d ] && mkdir -p ../zbx_env/etc/zabbix/zabbix_agentd.d
+        [ ! -d ../zbx_env/var/lib/mysql ] && mkdir -p ../zbx_env/var/lib/mysql
+        [ ! -d ../zbx_env/etc/ssl/nginx ] && mkdir -p ../zbx_env/etc/ssl/nginx
+        [ ! -d ../zbx_env/etc/ssl/grafana ] && mkdir -p ../zbx_env/etc/ssl/grafana
+        [ ! -d ../zbx_env/var/lib/grafana ] && mkdir -p ../zbx_env/var/lib/grafana
   #### 
 # SSL #
  ####
-        # Create a self signed SSL cert for zabbix frontend.
+         #check if openssl installed
+        OSSL=$(rpm -qa |egrep "^openssl" || echo "openssl is not installed")
+        if [[ $OSSL == "openssl is not installed" ]]; then
+            yum install -y openssl
+            echo -n "Install openssl:" && \
+            echo -ne "\t\t\t\t" && Done
+            sleep 1
+            EchoDash
+        else
+        echo -n "openssl is already installed:" && \
+        echo -ne "\t\t\t" && Skip
+        sleep 1
+        EchoDash
+        fi
+        
+        # Create SSL cert.
         echo -e ""
-        echo -e '\E[96m'"\033\- Deploy self signed SSL cert for Zabbix UI. \033[0m"
+        echo -e '\E[96m'"\033\- Deploy self signed SSL cert  \033[0m"
         sleep 1
         if [ ! -e $BASEDIR/zbx_env/etc/ssl/nginx/ssl.crt ] && [ ! -e $BASEDIR/zbx_env/etc/ssl/nginx/ssl.key ]; then
             openssl req -x509 -nodes -newkey rsa:2048 -days 1365 \

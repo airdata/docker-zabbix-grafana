@@ -673,7 +673,7 @@ case "$1" in
         fi
 
         # Import Linux servers dashboard
-        POST=$(jq '.dashboard.id = null' "../grafana_dashboards/linux_servers_dashboard.json" | \
+        POST=$(jq '.dashboard.id = null' "../grafana_dashboards/zabbix_server_dashboard.json" | \
             curl -s --insecure \
                 -H "Authorization:Bearer $GRF_API_KEY" \
                 -sS "$GRF_SERVER_URL/api/dashboards/db" -X POST \
@@ -693,7 +693,7 @@ case "$1" in
         fi
 
         # Import Zabbix system status dashboard
-        POST=$(jq '.dashboard.id = null' "../grafana_dashboards/linux_servers_dashboard.json" | \
+        POST=$(jq '.dashboard.id = null' "../grafana_dashboards/zabbix-system-status.json" | \
             curl -s --insecure \
             -H "Authorization:Bearer $GRF_API_KEY" \
             -sS "$GRF_SERVER_URL/api/dashboards/db" -X POST \

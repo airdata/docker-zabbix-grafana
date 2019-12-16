@@ -1162,7 +1162,7 @@ cat <<EOF
         "type": "alexanderzobnin-zabbix-datasource",
         "typeLogoUrl": "public/plugins/alexanderzobnin-zabbix-datasource/img/zabbix_app_logo.svg",
         "access": "proxy",
-        "url": "https://zabbix-web-nginx-mysql:443/api_jsonrpc.php",
+        "url": "http://zabbix-web-nginx-mysql/api_jsonrpc.php",
         "password": "zabbix",
         "user": "apiuser",
         "database": "",
